@@ -69,7 +69,7 @@ public class DatabaseHandler {
 
 
         //Adding information into database
-        public void WriteDatabase (String id, String title, String image) {
+        public void WriteInfoDatabase (String id, String title, String image) {
 
             SQLiteDatabase db = this.getWritableDatabase();
 
@@ -82,7 +82,7 @@ public class DatabaseHandler {
             long newRowId = db.insert(DataEntry.TABLE_NAME, null, values); //Insert row into database, returns primary key value
         }
 
-        public void ReadDatabase () {
+        public void ReadInfoDatabase () {
 
             SQLiteDatabase db = this.getReadableDatabase();
 
@@ -128,6 +128,20 @@ public class DatabaseHandler {
             );
              */
 
+        }
+
+        public void DeleteInfoDatabase () {
+
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            //Under what to get -> LIKE is a pattern
+            String selection = DataEntry.COLUMN_NAME_TITLE + " LIKE ?";
+
+            // Specify arguments in placeholder order. -> where you delete from
+            String[] selectionArgs = { "Jathavan" };
+
+            // Issue SQL statement.
+            db.delete(DataEntry.TABLE_NAME, selection, selectionArgs);
         }
     }
 }
