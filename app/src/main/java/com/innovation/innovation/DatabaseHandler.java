@@ -143,5 +143,26 @@ public class DatabaseHandler {
             // Issue SQL statement.
             db.delete(DataEntry.TABLE_NAME, selection, selectionArgs);
         }
+
+        public void UpdateInfoDatabase(String title) {
+
+            SQLiteDatabase db = this.getReadableDatabase();
+
+            //Insert new values for one column
+            ContentValues values = new ContentValues();
+            values.put(DataEntry.COLUMN_NAME_TITLE, title);
+
+            //Which row to update, based on title
+            String selection = DataEntry.COLUMN_NAME_TITLE + " LIKE ?";
+            String[] selectionArgs = { "Jathavan" };
+
+            //Returns number of rows affected
+            int count = db.update(
+                    DataEntry.TABLE_NAME,
+                    values,
+                    selection,
+                    selectionArgs
+            );
+        }
     }
 }
