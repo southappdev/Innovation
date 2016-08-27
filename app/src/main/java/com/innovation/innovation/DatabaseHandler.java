@@ -52,6 +52,7 @@ public class DatabaseHandler {
         }
 
         //Creates database
+        @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_ENTRY);
         }
