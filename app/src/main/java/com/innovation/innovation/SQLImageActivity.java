@@ -1,12 +1,18 @@
 package com.innovation.innovation;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.sql.SQLClientInfoException;
@@ -114,7 +120,55 @@ public class SQLImageActivity extends ListActivity {
     private class ItemsAdapter extends BaseAdapter {
         String[] items;
 
+        //Constructor for ItemsAdapter
+        public ItemsAdapter (Context context, int textViewResourceId, String[] items) {
+            this.items = items;
+        }
+
+        //This method will be called for every item in the ListView to create views with their properties set as we want.
+        @Override
+        public View getView (final int POSITION, View convertView, ViewGroup parent) {
+            TextView desc;
+            TextView cap;
+            View view = convertView;
+            ImageView img;
+
+            if (view == null) {
+                //LayoutInflater nstantiates a layout XML file into its corresponding View objects.
+                LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = vi.inflate(R.layout.item, null);
+            }
+
+            //Create all these ids
+            //Assigns views from the LayoutInflater to their proper view objects
+            img = (ImageView) view.findViewById(R.id.image);
+            cap = (TextView) view.findViewById(R.id.caption);
+            desc = (TextView) view.findViewById(R.id.description);
+            
+            cap.setText(caption.get(POSITION));
+            desc.setText(description.get(POSITION));
+            img.setImageBitmap(BitmapFactory.decodeByteArray(image.get(POSITION), 0, image.get(POSITION).length));
+
+            return view;
+        }
+
+        public int getCount() {
+            return items.length;
+        }
+
+        public Object getItem(int position) {
+            return position;
+        }
+
+        public long getItemId(int position) {
+            return position;
+        }
+    }
+
+    private Cursor getRawEvents (String sql) {
 
     }
+
+
 
 }
