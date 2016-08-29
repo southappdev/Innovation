@@ -25,6 +25,7 @@ public class DatabaseHandler {
         public static final String COLUMN_NAME_ENTRY_ID = "Jath's ID";
         public static final String COLUMN_NAME_TITLE = "Jathavan";
         public static final String COLUMN_NAME_IMAGE = "Jath's Image";
+        public static final String COLUMN_NAME_CAPTION = "Hi I am Jath";
     }
 
     //Creates database entry with table columns and rows
@@ -34,6 +35,7 @@ public class DatabaseHandler {
                     DataEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
                     DataEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                     DataEntry.COLUMN_NAME_IMAGE + TEXT_TYPE + COMMA_SEP +
+                    DataEntry.COLUMN_NAME_CAPTION + TEXT_TYPE + COMMA_SEP +
             " )";
 
     //Used to delete the database entry
@@ -69,8 +71,8 @@ public class DatabaseHandler {
         }
 
 
-        //Adding information into database
-        public void WriteInfoDatabase (String id, String title, String image) {
+        //Adding information into database -> image is byte
+        public void WriteInfoDatabase (String id, String title, String image, String caption) {
 
             SQLiteDatabase db = this.getWritableDatabase();
 
@@ -78,7 +80,8 @@ public class DatabaseHandler {
             ContentValues values = new ContentValues();
             values.put(DataEntry.COLUMN_NAME_ENTRY_ID, id); //Columns ""
             values.put(DataEntry.COLUMN_NAME_TITLE, title);
-            values.put(DataEntry.COLUMN_NAME_IMAGE, image); //Fix
+            values.put(DataEntry.COLUMN_NAME_IMAGE, image);
+            values.put(DataEntry.COLUMN_NAME_CAPTION, caption); //Fix
 
             long newRowId = db.insert(DataEntry.TABLE_NAME, null, values); //Insert row into database, returns primary key value
         }
@@ -96,7 +99,8 @@ public class DatabaseHandler {
             String[] projection = {
                     DataEntry._ID,
                     DataEntry.COLUMN_NAME_TITLE,
-                    DataEntry.COLUMN_NAME_IMAGE
+                    DataEntry.COLUMN_NAME_IMAGE,
+                    DataEntry.COLUMN_NAME_CAPTION
             };
 
             // Filter results WHERE "title" = 'My Title' -> under what to get
