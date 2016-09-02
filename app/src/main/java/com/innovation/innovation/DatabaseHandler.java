@@ -56,7 +56,9 @@ public class DatabaseHandler {
         //Creates database
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL(CREATE_ENTRY);
+            //db.execSQL(CREATE_ENTRY);
+            //Makes gallery of image below
+            db.execSQL("CREATE TABLE gallery (id varchar(20), image BLOB,caption varchar(160),description varchar(200))");
         }
 
         //Discards database and create a new
@@ -70,7 +72,7 @@ public class DatabaseHandler {
             onUpgrade(db, oldVersion, newVersion);
         }
 
-
+        /*
         //Adding information into database -> image is byte
         public void WriteInfoDatabase (String id, String title, String image, String caption) {
 
@@ -85,6 +87,7 @@ public class DatabaseHandler {
 
             long newRowId = db.insert(DataEntry.TABLE_NAME, null, values); //Insert row into database, returns primary key value
         }
+         */
 
         public void ReadInfoDatabase () {
 

@@ -1,9 +1,11 @@
 package com.innovation.innovation;
 
 import android.app.ListActivity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,7 +21,11 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLClientInfoException;
 import java.util.ArrayList;
 
@@ -63,8 +69,7 @@ public class SQLImageActivity extends ListActivity {
         //What is this - if fucked up, uncomment cause dunno what this does
         //db.delete("gallery", "id=?", new String[]{"12"});
 
-        populate.setOnClickListener(new View.onClickListener() {
-            @Override
+        populate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 callInsertion("1", "http://2.bp.blogspot.com/-bkmnlZUKXPs/TjZeTVCgp9I/AAAAAAAAAHI/SPnWJYqq4uQ/s1600/twitter_follow.gif", "First", "This is the first item");
                 callInsertion("2", "http://1.bp.blogspot.com/-HDNFnyRU2Cw/TcuMbBaL70I/AAAAAAAAAGc/7eWN1qnZbAw/s320/seek.JPG", "Second", "This is the second item");
@@ -78,12 +83,44 @@ public class SQLImageActivity extends ListActivity {
     }
 
     private void callInsertion(String id, String url, String caption, String description) {
-        //Come back to this function
+
+        //Calls insertData and changes url to bytearray to use for that method
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        InputStream is = null;
+        URL link = null;
+        try {
+            link = new URL(url);
+            is = link.openStream ();
+            byte[] byteChunk = new byte[4096]; // Or whatever size you want to read in at a time.
+            int n;
+
+            while ( (n = is.read(byteChunk)) > 0 ) {
+                baos.write(byteChunk, 0, n);
+            }
+
+            insertData(id, baos.toByteArray(), caption, description);
+        }
+        catch (IOException e) {
+            e.printStackTrace ();
+            // Perform any other exception handling that's appropriate.
+        }
+
+
     }
 
 
     private void insertData(String id, byte[] image, String caption, String description) {
-        //need to update db with new values
+        //Insert data into database
+        SQLiteDatabase db = dataHelp.getWritableDatabase();
+        ContentValues values;
+        values = new ContentValues();
+        values.put("id", id);
+        values.put("image", image);
+        values.put("caption", caption);
+        values.put("description", description);
+
+        db.insert("gallery", null, values);
     }
 
     private void getDataAndPopulate() {
@@ -191,7 +228,8 @@ public class SQLImageActivity extends ListActivity {
 
             int capPos = (int) caption.get(POSITION);
             int descPos = (int) description.get(POSITION);
-            int imagePos = (int) image.get(POSITION);
+            byte[] imagePos = (byte[]) image.get(POSITION);
+            //Image must be bytearray to have length
 
             cap.setText(capPos);
             desc.setText(descPos);
@@ -217,7 +255,7 @@ public class SQLImageActivity extends ListActivity {
         SQLiteDatabase db = (dataHelp).getReadableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
 
-        startManagingCursor(cursor); //Find alternative
+        //startManagingCursor(cursor); //Find alternative
         return cursor;
     }
 
@@ -227,7 +265,7 @@ public class SQLImageActivity extends ListActivity {
         //Cursor box -> query = info that is retrieved from the database
         Cursor cursor = db.query(table, null, null, null, null, null, null);
 
-        startManagingCursor(cursor); //Find alternative
+        //startManagingCursor(cursor); //Find alternative
 
         return cursor;
     }
