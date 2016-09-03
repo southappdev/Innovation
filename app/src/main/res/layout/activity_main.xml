@@ -18,4 +18,35 @@
         android:layout_height="wrap_content"
         android:text="@string/button_send"
         android:onClick="sendMessage" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/populate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Populate" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/populate"/>
+
+        <TextView
+            android:id="@+id/caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="caption"
+            android:layout_below="@+id/image"/>
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="description"
+            android:layout_below="@+id/caption"/>
+    </RelativeLayout>
 </LinearLayout>
